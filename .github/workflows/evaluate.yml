@@ -45,6 +45,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.10"
+          activate-environment: false
 
       - name: Install dependencies
         run: |
