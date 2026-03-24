@@ -2,34 +2,32 @@
 
 This repository contains the automated evaluation system for the LevDoom Seek and Slay competition. When a student pushes to their submission repo, GitHub Actions runs this judge and submits the result to the leaderboard.
 
----
 
 ## Repository overview
 
 ```mermaid
 flowchart LR
     subgraph student-repo["Student Repo (per student)"]
-        SA[student_agent.py\nweights / assets]
-        SW[.github/workflows\nevaluate.yml\n— calls judge-workflow]
+        SA[student_agent.py\nweights, etc.]
+        SW[.github/workflows\nmain.yml]
     end
 
-    subgraph judge-repo["Judge Repo (this repo)"]
+    subgraph judge-repo["hw3-2-judge-workflow"]
         JW[evaluate.yml\nreusable workflow]
         JP[judge.py\nevaluation logic]
     end
 
-    subgraph leaderboard-repo["Leaderboard Repo"]
-        LW[.github/workflows\nsubmit.yml\n— listens for repository_dispatch]
+    subgraph leaderboard-repo["hw3-2-leaderboard"]
+        LW[.github/workflows\nsubmit.yml\n]
         LP[GitHub Pages\nleaderboard site]
     end
 
     SW -- "workflow_call" --> JW
     JW -- "checkout + run" --> JP
-    JW -- "POST /dispatches\n(results + student_id)" --> LW
+    JW -- "POST evaluation results" --> LW
     LW -- "updates" --> LP
 ```
 
----
 
 ## How evaluation works
 
@@ -50,7 +48,6 @@ flowchart LR
 | 3 | `SeekAndSlayLevel3_1-v0` | 7 |
 | 4 | `SeekAndSlayLevel4-v0` | — (final level) |
 
----
 
 ## Student submission guide
 
@@ -79,11 +76,9 @@ on:
 
 jobs:
   evaluate:
-    uses: OWNER/judge_workflow/.github/workflows/evaluate.yml@main
+    uses: ntu-rl-2026-spring2-hw3/hw3-2-judge-workflow/.github/workflows/evaluate.yml@main
     secrets: inherit
 ```
-
-See [sample_student_workflow.yml](sample_student_workflow.yml) for a copy you can download directly.
 
 `secrets: inherit` passes the necessary secrets (`LEADERBOARD_TOKEN`, `SUBMIT_SECRET`) from the judge workflow to your job. You do not need to configure any secrets in your own repo.
 
@@ -104,8 +99,6 @@ class StudentAgent:
         return self.action_space.sample()
 ```
 
-See [sample_student_agent.py](sample_student_agent.py) for a fully annotated example.
-
 ### Loading model weights or other files
 
 The judge does **not** run from your repo's directory, so bare relative paths will fail.
@@ -123,10 +116,12 @@ class StudentAgent:
 
 ### `meta.xml` format
 
+Replace `your_student_id` with your actual student ID. This file is used by the judge to identify you when submitting results to the leaderboard.
+
 ```xml
 <submission>
   <info>
-    <name>your_student_id</name>
+    <name>r00000001</name>
   </info>
 </submission>
 ```
