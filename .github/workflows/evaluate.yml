@@ -2,6 +2,11 @@ name: Evaluate Student Submission
 
 on:
   workflow_call:
+    secrets:
+      LEADERBOARD_TOKEN:
+        required: true
+      SUBMIT_SECRET:
+        required: true
 
 jobs:
   evaluate:
