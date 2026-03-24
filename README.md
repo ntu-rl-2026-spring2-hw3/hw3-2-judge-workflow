@@ -88,10 +88,7 @@ on:
 jobs:
   evaluate:
     uses: ntu-rl-2026-spring2-hw3/hw3-2-judge-workflow/.github/workflows/evaluate.yml@main
-    secrets: inherit
 ```
-
-`secrets: inherit` passes the necessary secrets (`LEADERBOARD_TOKEN`) from the judge workflow to your job. You do not need to configure any secrets in your own repo.
 
 ### Implementing `student_agent.py`
 
