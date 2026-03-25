@@ -53,7 +53,7 @@ def load_student_agent(student_path: str) -> "Actor":
         raise ImportError("student_agent.py must define a StudentAgent class")
 
     try:
-        env = gymnasium.make(LEVELS[0]["id"], {}, {})
+        env = gymnasium.make(LEVELS[0]["id"])
         agent = module.StudentAgent(env.action_space)
         env.close()
     except Exception as exc:
