@@ -129,7 +129,7 @@ def evaluate_level(level_id: str, actor: "Actor", seeds: list[int]) -> dict:
     """
     per_seed = []
     for seed in seeds:
-        env = levdoom.make(level_id)
+        env = gymnasium.make(level_id)
         info = run_episode(env, actor, seed=seed)
         env.close()
         per_seed.append(info)
