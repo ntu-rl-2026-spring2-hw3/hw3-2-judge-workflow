@@ -55,7 +55,7 @@ jobs:
           uv venv --clear .venv
           echo "$GITHUB_WORKSPACE/.venv/bin" >> "$GITHUB_PATH"
           uv pip install --python .venv/bin/python -r student/requirements.txt
-          uv pip install --python .venv/bin/python numpy==2.2.6 levdoom==1.3.0
+          uv pip install --python .venv/bin/python numpy==2.2.6 levdoom==1.0.3
 
       # ── Evaluation ──────────────────────────────────────────────
       - name: Run evaluation
