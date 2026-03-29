@@ -47,7 +47,11 @@ def check_submission_size(student_path: str) -> None:
     total = 0
     files_found = []
 
+    EXCLUDE_DIRS = {".git"}
+
     for f in root.rglob("*"):
+        if any(part in EXCLUDE_DIRS for part in f.relative_to(root).parts):
+            continue
         if f.is_file():
             size = f.stat().st_size
             total += size
