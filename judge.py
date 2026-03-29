@@ -89,10 +89,10 @@ def save_results(results: list[dict], output_path: str) -> None:
 # ---------------------------------------------------------------------------
 
 LEVELS = [
-    {"id": "SeekAndSlayLevel0-v0",  "map": "default",           "threshold": 15},
-    {"id": "SeekAndSlayLevel1_6-v0","map": "mixed_enemies",      "threshold": 5},
-    {"id": "SeekAndSlayLevel3_1-v0","map": "blue_mixed_resized", "threshold": 5},
-    {"id": "SeekAndSlayLevel2_3-v0","map": "red_mixed_enemies",  "threshold": 5},
+    {"id": "SeekAndSlayLevel0-v0",  "map": "default",           "threshold": 18},
+    {"id": "SeekAndSlayLevel1_6-v0","map": "mixed_enemies",      "threshold": 9},
+    {"id": "SeekAndSlayLevel3_1-v0","map": "blue_mixed_resized", "threshold": 9},
+    {"id": "SeekAndSlayLevel2_3-v0","map": "red_mixed_enemies",  "threshold": 9},
     {"id": "SeekAndSlayLevel4-v0",  "map": "complete",           "threshold": None},
 ]
 
