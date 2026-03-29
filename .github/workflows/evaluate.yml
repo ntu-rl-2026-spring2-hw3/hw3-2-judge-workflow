@@ -14,6 +14,9 @@ jobs:
         with:
           path: student
 
+      - name: Remove .git from student submission
+        run: rm -rf student/.git
+
       - name: Checkout judge
         uses: actions/checkout@v4
         with:
