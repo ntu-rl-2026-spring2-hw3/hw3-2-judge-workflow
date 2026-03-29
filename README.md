@@ -51,15 +51,20 @@ flowchart LR
 
 ### Scoring
 
-Leaderboard ranks are determined first by **number of levels reached**, then by a weighted score as tiebreaker:
+Leaderboard ranks are determined by **total score** (higher is better):
+$$
+\text{Total Score}=\sum_{l=0}^4 w_l\times(\text{kills}\times1.0+\text{health}\times 0.01+\text{ammo}\times 0.005)
+$$
 
-```
-score = kills × 0.8 + health × 0.1 + ammo × 0.1
-```
+Each level has a difficulty weight:
 
-Each value is the mean across the 5 seeds for that level.
+| Tier   | Levels ($l$) | Weight ($w_l$) |
+| ------ | ------------ | -------------- |
+| Easy   | 0            | ×1             |
+| Medium | 1, 2, 3      | ×2             |
+| Final  | 4            | ×3             |
 
-
+$\text{kills}$ is the dominant factor. $\text{health}$ (0–100) and $\text{ammo}$ (0–200) each contribute at most 1 point per level before weighting. All values are the mean across the 5 seeds for that level.
 ## Student submission guide
 
 ### Required files
