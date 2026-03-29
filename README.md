@@ -52,6 +52,7 @@ flowchart LR
 ### Scoring
 
 Leaderboard ranks are determined by **total score** (higher is better):
+
 $$
 \text{Total Score}=\sum_{l=0}^4 w_l\times(\text{kills}\times1.0+\text{health}\times 0.01+\text{ammo}\times 0.005)
 $$
