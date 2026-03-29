@@ -123,6 +123,10 @@ class StudentAgent:
         return self.action_space.sample()
 ```
 
+### Submission size limit
+
+The total size of all files in your repository must not exceed **51 MB**. This includes source code, model weights, and any other files. Submissions that exceed this limit will be rejected before evaluation begins.
+
 ### Loading model weights or other files
 
 The judge does **not** run from your repo's directory, so bare relative paths will fail.

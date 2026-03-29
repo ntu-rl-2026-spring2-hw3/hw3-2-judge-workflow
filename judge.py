@@ -30,6 +30,44 @@ class Actor(Protocol):
 
 
 # ---------------------------------------------------------------------------
+# Model file size check
+# ---------------------------------------------------------------------------
+
+MAX_TOTAL_SIZE_MB = 51
+
+
+def check_submission_size(student_path: str) -> None:
+    """
+    Enforce a total size limit on the student submission directory.
+
+    Sums every file (including source code, weights, etc.).
+    Raises RuntimeError if total exceeds MAX_TOTAL_SIZE_MB.
+    """
+    root = Path(student_path)
+    total = 0
+    files_found = []
+
+    for f in root.rglob("*"):
+        if f.is_file():
+            size = f.stat().st_size
+            total += size
+            files_found.append((f.relative_to(root), size))
+
+    files_found.sort(key=lambda x: x[1], reverse=True)
+
+    print(f"\nStudent submission files:")
+    for name, size in files_found:
+        print(f"  {name}: {size / 1024 / 1024:.2f} MB")
+    print(f"  Total: {total / 1024 / 1024:.2f} MB (limit: {MAX_TOTAL_SIZE_MB} MB)")
+
+    if total > MAX_TOTAL_SIZE_MB * 1024 * 1024:
+        raise RuntimeError(
+            f"Submission too large: {total / 1024 / 1024:.2f} MB "
+            f"(limit: {MAX_TOTAL_SIZE_MB} MB)"
+        )
+
+
+# ---------------------------------------------------------------------------
 # Student agent loader
 # ---------------------------------------------------------------------------
 
@@ -43,6 +81,8 @@ def load_student_agent(student_path: str) -> "Actor":
     agent_file = Path(student_path) / "student_agent.py"
     if not agent_file.exists():
         raise FileNotFoundError(f"student_agent.py not found at {agent_file}")
+
+    check_submission_size(student_path)
 
     sys.path.insert(0, str(Path(student_path).resolve()))
 
