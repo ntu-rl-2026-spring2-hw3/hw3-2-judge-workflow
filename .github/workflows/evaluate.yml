@@ -46,8 +46,8 @@ jobs:
 
       - name: Check for template submission
         run: |
-          if [ "${{ steps.meta.outputs.student_id }}" = "r0000001" ]; then
-            echo "::error::Student ID is r0000001 — this is the template placeholder. Please update meta.xml with your real student ID before submitting."
+          if [ "${{ steps.meta.outputs.student_id }}" = "r00000001" ]; then
+            echo "::error::Student ID is r00000001 — this is the template placeholder. Please update meta.xml with your real student ID before submitting."
             exit 1
           fi
 
