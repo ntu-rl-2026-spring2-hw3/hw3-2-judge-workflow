@@ -146,7 +146,7 @@ FIXED_ENV_SEED = 1234   # Same scenario for all students; SEEDS only vary policy
 # Core evaluation logic
 # ---------------------------------------------------------------------------
 
-def seed_policy_rngs(env, seed: int) -> None:
+def seed_policy_rngs(env, actor, seed: int) -> None:
     """Seed every RNG that could affect the policy's actions.
 
     Called *after* actor.reset() so students cannot override these inside
@@ -161,6 +161,13 @@ def seed_policy_rngs(env, seed: int) -> None:
     except ImportError:
         pass
     env.action_space.seed(seed)
+    # Seed the action_space the actor is holding (likely the throwaway
+    # one from load_student_agent). Without this, actor.act() ->
+    # self.action_space.sample() reads from an RNG that was never
+    # re-seeded and drifts with process entropy.
+    actor_space = getattr(actor, "action_space", None)
+    if actor_space is not None and actor_space is not env.action_space:
+        actor_space.seed(seed)
 
 
 def run_episode(env, actor: "Actor", seed: int = None) -> dict:
@@ -173,7 +180,7 @@ def run_episode(env, actor: "Actor", seed: int = None) -> dict:
     obs, info = env.reset()
     actor.reset()
     if seed is not None:
-        seed_policy_rngs(env, seed)
+        seed_policy_rngs(env, actor, seed)
     done = False
     while not done:
         action = actor.act(obs)
@@ -278,13 +285,6 @@ if __name__ == "__main__":
     parser.add_argument("--student-path", default=".", help="Directory containing student_agent.py")
     parser.add_argument("--output", default="results.json", help="Path to write results JSON")
     args = parser.parse_args()
-
-    warmup_key = os.environ.get("JUDGE_WARMUP_KEY")
-    if warmup_key is None:
-        raise RuntimeError(
-            "JUDGE_WARMUP_KEY environment variable is required for deterministic warmup."
-        )
-    random.seed(int(warmup_key))
 
     actor = load_student_agent(args.student_path)
     results = run_eval(actor)
