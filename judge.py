@@ -138,16 +138,41 @@ LEVELS = [
 
 NUM_SEEDS = 5
 SEEDS = [0, 1, 2, 3, 4]
+FIXED_ENV_SEED = 1234   # Same scenario for all students; SEEDS only vary policy randomness.
 
 
 # ---------------------------------------------------------------------------
 # Core evaluation logic
 # ---------------------------------------------------------------------------
 
+def seed_policy_rngs(env, seed: int) -> None:
+    """Seed every RNG that could affect the policy's actions.
+
+    Called *after* actor.reset() so students cannot override these inside
+    their own reset(). Covers stdlib random, numpy, torch (CPU), and the
+    env's action_space (for action_space.sample()).
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    try:
+        import torch
+        torch.manual_seed(seed)
+    except ImportError:
+        pass
+    env.action_space.seed(seed)
+
+
 def run_episode(env, actor: "Actor", seed: int = None) -> dict:
-    """Run a single episode and return the final info dict."""
-    obs, info = env.reset(seed=seed)
+    """Run a single episode and return the final info dict.
+
+    The environment is pinned to FIXED_ENV_SEED so every student faces the
+    same scenario. `seed` only varies policy randomness across runs.
+    """
+    env.unwrapped.game.set_seed(FIXED_ENV_SEED)
+    obs, info = env.reset()
     actor.reset()
+    if seed is not None:
+        seed_policy_rngs(env, seed)
     done = False
     while not done:
         action = actor.act(obs)
