@@ -10,6 +10,7 @@ configured LevDoom levels, writing results to results.json.
 
 import importlib.util
 import json
+import os
 import sys
 from pathlib import Path
 import random
@@ -277,6 +278,13 @@ if __name__ == "__main__":
     parser.add_argument("--student-path", default=".", help="Directory containing student_agent.py")
     parser.add_argument("--output", default="results.json", help="Path to write results JSON")
     args = parser.parse_args()
+
+    warmup_key = os.environ.get("JUDGE_WARMUP_KEY")
+    if warmup_key is None:
+        raise RuntimeError(
+            "JUDGE_WARMUP_KEY environment variable is required for deterministic warmup."
+        )
+    random.seed(int(warmup_key))
 
     actor = load_student_agent(args.student_path)
     results = run_eval(actor)
