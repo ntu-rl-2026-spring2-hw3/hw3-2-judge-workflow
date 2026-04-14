@@ -218,7 +218,7 @@ def evaluate_level(level_id: str, actor: "Actor", seeds: list[int]) -> dict:
         kills  = info.get("kills",  0)
         health = info.get("health", 0)
         ammo   = info.get("ammo",   0)
-        print(f"  seed={seed}  kills={kills}  health={health}  ammo={ammo}")
+        print(f"  seed={seed}  kills={kills}  remaining_health={health}  remaining_ammo={ammo}")
 
     kills_list  = [ep.get("kills",  0) for ep in per_seed]
     health_list = [ep.get("health", 0) for ep in per_seed]
