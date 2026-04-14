@@ -273,7 +273,7 @@ def run_eval(actor: "Actor") -> list[dict]:
     print(f"\n{'='*60}")
     print("Results summary:")
     for r in results:
-        print(f"  {r['level']}: kills={r['mean_kills']:.2f}  health={r['mean_health']:.2f}  ammo={r['mean_ammo']:.2f}")
+        print(f"  {r['level']}: kills={r['mean_kills']:.2f}  remaining_health={r['mean_health']:.2f}  remaining_ammo={r['mean_ammo']:.2f}")
     print(f"{'='*60}\n")
 
     return results
